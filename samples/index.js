@@ -34,7 +34,7 @@ sets.ips = new IpGenerator(100, 1000);
 sets.countries = new WeightedList(require('./countries'));
 sets.currentUser = new WeightedList(require('./current_users'));
 sets.process_name = new RandomList(require('./process_name'));
-sets.device_name = new RandomList(require('./device_name'));
+sets.device_name = new WeightedList(require('./device_name'));
 
 sets.site1 = new RandomList(require('./site1'));
 sets.site2 = new RandomList(require('./site2'));
