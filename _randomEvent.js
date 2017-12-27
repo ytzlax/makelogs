@@ -116,6 +116,8 @@ module.exports = function RandomEvent(indexPrefix) {
     event.driver = samples.driver();
     event.chrome_ver = samples.chrome_ver();
     event.process_name = samples.process_name();
+    event.device_name = samples.device_name();
+
     event.site1 = samples.site1();
     event.site2 = samples.site2();
     event.site3 = samples.site3();
