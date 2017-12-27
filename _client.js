@@ -16,7 +16,6 @@ if (!url) {
 
     var parsed = parse(host, false, true);
     url = formatUrl({
-        protocol: protocol,
         hostname: parsed.hostname,
         port: parsed.port,
         auth: argv.auth
