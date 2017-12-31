@@ -20,27 +20,31 @@ sets.lessRandomMsInDay = roundAllGets(new Stochator({
 sets.lessRandomRespSize = require('./response_size');
 sets.randomRam = new RandomList(require('./ram'));
 sets.randomOs = new RandomList(require('./os'));
-sets.driver = new RandomList(require('./drivers'));
+//sets.driver = new RandomList(require('./drivers'));
 sets.chrome_ver = new RandomList(require('./chrome_vers'));
 
 sets.astronauts = new RandomList(require('./astronauts').map(function (name) {
     return name.replace(/\W+/g, '-').toLowerCase();
 }));
 
-sets.airports = new RandomList(require('./airports'));
+
 
 sets.ips = new IpGenerator(100, 1000);
+sets.log_type = new WeightedList(require('./log_type'));
 
-sets.countries = new WeightedList(require('./countries'));
 sets.currentUser = new WeightedList(require('./current_users'));
 sets.process_name = new RandomList(require('./process_name'));
-sets.device_name = new WeightedList(require('./device_name'));
+sets.alert = new WeightedList(require('./alerts'));
 
-sets.site1 = new RandomList(require('./site1'));
-sets.site2 = new RandomList(require('./site2'));
-sets.site3 = new RandomList(require('./site3'));
-sets.site4 = new RandomList(require('./site4'));
+sets.device = new RandomList(require('./devices'));
 
+
+sets.timezones = new WeightedList({
+    '+02:00': 1
+});
+
+ sets.airports = new RandomList(require('./airports'));
+ sets.countries = new WeightedList(require('./countries'));
 // sets.extensions = new WeightedList({
 //   'png': 3,
 //   'gif': 2,
@@ -67,20 +71,12 @@ sets.site4 = new RandomList(require('./site4'));
 //   'login': 5
 // });
 
-sets.timezones = new WeightedList({
-    '+02:00': 1
-});
 
 // sets.referrers = new WeightedList({
 //   'www.slate.com':50,
 //   'twitter.com': 35,
 //   'facebook.com': 20,
 //   'nytimes.com': 10
-// });
-
-// sets.currentUser = new WeightedList({
-//   'yshachnai':0,
-//   'hadar':2
 // });
 
 // sets.stylesheets = new RandomList([
@@ -91,7 +87,6 @@ sets.timezones = new WeightedList({
 //   'pretty-layout.css',
 //   'semantic-ui.css'
 // ]);
-
 //sets.relatedContent = new RandomSample(0, 5, require('./_content'));
 
 module.exports = _.mapValues(sets, function (set) {

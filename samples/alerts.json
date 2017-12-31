@@ -1,0 +1,13 @@
+{
+  "driver_failed_status_detected": 1,
+  "host_information_was_changed": 1,
+  "host_name_of_zabbix_agent_was_changed": 1,
+  "lack_of_free_memory_on_server": 1,
+  "lack_of_free_swap_space": 1,
+  "processor_load_is_too_high": 1,
+  "too_many_processes": 1,
+  "has_just_been_restarted": 1,
+  "version_of_zabbix_agent_was_changed": 1,
+  "zabbix_agent__is_unreachable_for_5_minutes": 1,
+  "zabbix_extension_agent_on_DESKTOP62KDQVM_is_unreachable_for_5_minutes": 1
+}
