@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var WeightedList = require('./samples/weighted_list');
 
 var samples = require('./samples');
@@ -28,9 +29,12 @@ var day;
 
 function setEvent(iEvent, iDate, iDeviceObject) {
     "use strict";
+    // var events = [];
+    //_.forEach(iDeviceObject.drivers, function (value, key) {
+    //var event = _.cloneDeep(iEvent);
     iEvent.total_ram = iDeviceObject.totalRam;
-    iEvent.driver =(iDeviceObject.drivers);
-   // console.log("driver", iEvent.driver);
+    iEvent.driver = iDeviceObject.drivers;
+    // console.log("driver", iEvent.driver);
     iEvent.geo = {
         coordinates: samples.airports(),
         src: samples.countries(),
@@ -40,10 +44,8 @@ function setEvent(iEvent, iDate, iDeviceObject) {
     iEvent.current_user_last_login_date = iDate.setHours(iDate.getHours() - 4);
 
     iEvent.cpu_usage = (Math.random() * (0 - 60) + 60).toFixed(2);
-    iEvent.process_cpu_usage = (Math.random() * (2 - 40) + 40).toFixed(2);
 
     iEvent.ram_usage = (Math.random() * (0 - 8) + 8).toFixed(2);
-    iEvent.process_ram_usage = (Math.random() * (2 - 6) + 6).toFixed(2);
 
     iEvent.bw_out_usage = (Math.random() * (0 - 10) + 10).toFixed(2);
     iEvent.bw_in_usage = (Math.random() * (0 - 50) + 50).toFixed(2);
@@ -52,8 +54,15 @@ function setEvent(iEvent, iDate, iDeviceObject) {
 
     //iEvent.driver = samples.driver();
     iEvent.chrome_ver = samples.chrome_ver();
-    iEvent.process_name = samples.process_name();
 
+    //iEvent.process_name = samples.process_name();
+    //iEvent.process_ram_usage = (Math.random() * (2 - 6) + 6).toFixed(2);
+    // iEvent.process_cpu_usage = (Math.random() * (2 - 40) + 40).toFixed(2);
+    iEvent.process_list = [{
+        "name": "chrome",
+        "ram_usage": (Math.random() * (2 - 6) + 6).toFixed(2),
+        "cpu_usage": (Math.random() * (2 - 40) + 40).toFixed(2)
+    }]
     // iEvent.site1 = samples.site1();
     // iEvent.site2 = samples.site2();
     // iEvent.site3 = samples.site3();
@@ -105,6 +114,8 @@ function setDayOfWeek(iEvent, iDate) {
 }
 
 module.exports = function RandomEvent(indexPrefix) {
+    "use strict";
+    //var events = [];
     var event = {};
 
     var i = ++eventCounter;
@@ -173,6 +184,7 @@ module.exports = function RandomEvent(indexPrefix) {
     }
     else {
         setAlert(event);
+
     }
     //event.extension = samples.extensions();
     //event.response = samples.responseCodes();
@@ -227,6 +239,5 @@ module.exports = function RandomEvent(indexPrefix) {
     //     os: samples.randomOs(),
     //     ram: samples.randomRam()
     // };
-
     return event;
 };

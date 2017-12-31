@@ -38,6 +38,8 @@ client.usable
                     continue;
                 }
 
+                //for(var j=0;event.length>j;j++) {
+
                 // eventBuffer.push might return a promise,
                 var delay = eventBuffer.push({
                     header: {_index: event.index, _type: 'doc'},
@@ -49,6 +51,7 @@ client.usable
                     // stop the loop and restart once complete
                     return Promise.resolve(delay).then(crunch);
                 }
+                // }
             }
         }());
     })
