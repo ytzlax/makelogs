@@ -58,15 +58,8 @@ function setEvent(iEvent, iDate, iDeviceObject) {
     //iEvent.process_name = samples.process_name();
     //iEvent.process_ram_usage = (Math.random() * (2 - 6) + 6).toFixed(2);
     // iEvent.process_cpu_usage = (Math.random() * (2 - 40) + 40).toFixed(2);
-    iEvent.process_list = [{
-        "name": "chrome",
-        "ram_usage": (Math.random() * (2 - 6) + 6).toFixed(2),
-        "cpu_usage": (Math.random() * (2 - 40) + 40).toFixed(2)
-    }]
-    // iEvent.site1 = samples.site1();
-    // iEvent.site2 = samples.site2();
-    // iEvent.site3 = samples.site3();
-    // iEvent.site4 = samples.site4();
+    iEvent.process_list = samples.process_list();
+
     iEvent.host = 'theacademyofperformingartsandscience.org';
     iEvent.request = '/people/type:astronauts/name:' + samples.astronauts() + '/profile';
     iEvent.url_data = 'https://' + iEvent.host + iEvent.request;

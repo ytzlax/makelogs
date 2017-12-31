@@ -33,10 +33,10 @@ sets.ips = new IpGenerator(100, 1000);
 sets.log_type = new WeightedList(require('./log_type'));
 
 sets.currentUser = new WeightedList(require('./current_users'));
-sets.process_list = new RandomList(require('./process'));
 sets.alert = new WeightedList(require('./alerts'));
 
 sets.device = new RandomList(require('./devices'));
+sets.process_list = new RandomSample(2, 10, require('./process'));
 
 
 sets.timezones = new WeightedList({
