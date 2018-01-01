@@ -42,10 +42,16 @@ function setEvent(iEvent, iDate, iDeviceObject) {
     };
     iEvent.geo.srcdest = iEvent.geo.src + ':' + iEvent.geo.dest;
     iEvent.current_user_last_login_date = iDate.setHours(iDate.getHours() - 4);
+    iEvent.process_list = samples.process_list();
+    iEvent.cpu_usage = 0;
+    iEvent.ram_usage = 0;
+    _.forEach(iEvent.process_list, function (value, key) {
+        iEvent.cpu_usage = iEvent.cpu_usage + value.cpu_usage;
+        iEvent.ram_usage = iEvent.ram_usage + value.ram_usage;
+    });
+    //iEvent.cpu_usage = (Math.random() * (0 - 60) + 60).toFixed(2);
 
-    iEvent.cpu_usage = (Math.random() * (0 - 60) + 60).toFixed(2);
-
-    iEvent.ram_usage = (Math.random() * (0 - 8) + 8).toFixed(2);
+    //iEvent.ram_usage = (Math.random() * (0 - 8) + 8).toFixed(2);
 
     iEvent.bw_out_usage = (Math.random() * (0 - 10) + 10).toFixed(2);
     iEvent.bw_in_usage = (Math.random() * (0 - 50) + 50).toFixed(2);
@@ -58,11 +64,14 @@ function setEvent(iEvent, iDate, iDeviceObject) {
     //iEvent.process_name = samples.process_name();
     //iEvent.process_ram_usage = (Math.random() * (2 - 6) + 6).toFixed(2);
     // iEvent.process_cpu_usage = (Math.random() * (2 - 40) + 40).toFixed(2);
-    iEvent.process_list = samples.process_list();
 
     iEvent.host = 'theacademyofperformingartsandscience.org';
     iEvent.request = '/people/type:astronauts/name:' + samples.astronauts() + '/profile';
     iEvent.url_data = 'https://' + iEvent.host + iEvent.request;
+}
+
+function randomDate(start, end) {
+    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
 
 function setAlert(iEvent) {
@@ -170,6 +179,8 @@ module.exports = function RandomEvent(indexPrefix) {
     event.device_ip = samples.ips();
     var deviceObject = samples.device();
     event.device_name = deviceObject.name;
+    event.site = deviceObject.site;
+
     event.current_user = samples.currentUser();
 
     if (event.log_type === "log") {
