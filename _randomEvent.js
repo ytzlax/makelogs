@@ -27,6 +27,20 @@ var indexInterval = argv.indexInterval;
 var dayMoment = argv.start.clone();
 var day;
 
+function getProcess(iEvent) {
+    "use strict";
+    var processes = [];
+    _.forEach(samples.process_list(), function (value) {
+        var event = _.cloneDeep(iEvent);
+        event.process_name = value.name;
+        event.process_ram_usage = value.ram_usage;
+        event.process_cpu_usage = value.cpu_usage;
+        processes.push(event);
+    });
+    return processes;
+
+}
+
 function setEvent(iEvent, iDate, iDeviceObject) {
     "use strict";
     // var events = [];
@@ -42,16 +56,18 @@ function setEvent(iEvent, iDate, iDeviceObject) {
     };
     iEvent.geo.srcdest = iEvent.geo.src + ':' + iEvent.geo.dest;
     iEvent.current_user_last_login_date = iDate.setHours(iDate.getHours() - 4);
-    iEvent.process_list = samples.process_list();
     iEvent.cpu_usage = 0;
     iEvent.ram_usage = 0;
-    _.forEach(iEvent.process_list, function (value, key) {
-        iEvent.cpu_usage = iEvent.cpu_usage + value.cpu_usage;
-        iEvent.ram_usage = iEvent.ram_usage + value.ram_usage;
-    });
-    //iEvent.cpu_usage = (Math.random() * (0 - 60) + 60).toFixed(2);
+    // _.forEach(iEvent.process_list, function (value, key) {
+    //     iEvent.cpu_usage = iEvent.cpu_usage + value.cpu_usage;
+    //     iEvent.ram_usage = iEvent.ram_usage + value.ram_usage;
+    // });
 
-    //iEvent.ram_usage = (Math.random() * (0 - 8) + 8).toFixed(2);
+    iEvent.cpu_usage = (Math.random() * (0 - 60) + 60).toFixed(2);
+
+    iEvent.ram_usage = (Math.random() * (0 - 8) + 8).toFixed(2);
+
+    iEvent.ram_usage = iEvent.ram_usage / iEvent.total_ram;
 
     iEvent.bw_out_usage = (Math.random() * (0 - 10) + 10).toFixed(2);
     iEvent.bw_in_usage = (Math.random() * (0 - 50) + 50).toFixed(2);
@@ -68,6 +84,9 @@ function setEvent(iEvent, iDate, iDeviceObject) {
     iEvent.host = 'theacademyofperformingartsandscience.org';
     iEvent.request = '/people/type:astronauts/name:' + samples.astronauts() + '/profile';
     iEvent.url_data = 'https://' + iEvent.host + iEvent.request;
+    iEvent.response_time = (Math.random() * (0 - 60) + 60).toFixed(2);
+
+
 }
 
 function randomDate(start, end) {
@@ -87,26 +106,43 @@ function setAlert(iEvent) {
  * @param iEvent
  * @param iHour
  */
-function setTimeOfDay(iEvent, iHour, iMinutes, iSeconds, iMs) {
-    "use strict";
-    var newTime = new Date('2017', '04', '25', iHour, iMinutes, iSeconds, iMs);
-    var sixDate = new Date("2017-05-25T06:00:00.000Z");
-    var elavenDate = new Date("2017-05-25T11:00:00.000Z");
-    var fourDate = new Date("2017-05-25T16:00:00.000Z");
-    var nineDate = new Date("2017-05-25T21:00:00.000Z");
+// function setTimeOfDay(iEvent, iHour, iMinutes, iSeconds, iMs) {
+function setTimeOfDay(iEvent, iDate) {
 
-    if (newTime > sixDate && newTime <= elavenDate) {
+    "use strict";
+    // var newTime = new Date('2017', '04', '25', iHour, iMinutes, iSeconds, iMs);
+    // var sixDate = new Date("2017-05-25T06:00:00.000Z");
+    // var elavenDate = new Date("2017-05-25T11:00:00.000Z");
+    // var fourDate = new Date("2017-05-25T16:00:00.000Z");
+    // var nineDate = new Date("2017-05-25T21:00:00.000Z");
+    //
+    // if (newTime > sixDate && newTime <= elavenDate) {
+    //     iEvent.time_of_day = "morning";
+    // }
+    // else if (newTime > elavenDate && newTime <= fourDate) {
+    //     iEvent.time_of_day = "noon";
+    // }
+    // else if (newTime > fourDate && newTime <= nineDate) {
+    //     iEvent.time_of_day = "evening";
+    // }
+    // else {
+    //     iEvent.time_of_day = "night";
+    // }
+    var hour = iDate.getHours();
+    if (hour > 6 && hour <= 11) {
         iEvent.time_of_day = "morning";
     }
-    else if (newTime > elavenDate && newTime <= fourDate) {
+    else if (hour > 11 && hour <= 16) {
         iEvent.time_of_day = "noon";
     }
-    else if (newTime > fourDate && newTime <= nineDate) {
+    else if (hour > 16 && hour <= 21) {
         iEvent.time_of_day = "evening";
     }
     else {
         iEvent.time_of_day = "night";
     }
+
+
 }
 
 function setDayOfWeek(iEvent, iDate) {
@@ -119,7 +155,7 @@ module.exports = function RandomEvent(indexPrefix) {
     "use strict";
     //var events = [];
     var event = {};
-
+    var processes = [];
     var i = ++eventCounter;
     var iInDay = i % countPerDay;
 
@@ -152,7 +188,9 @@ module.exports = function RandomEvent(indexPrefix) {
 
     // apply the values found to the date
     var date = new Date(day.year, day.month, day.date, hours, minutes, seconds, ms);
-    setTimeOfDay(event, hours, minutes, seconds, ms);
+    // setTimeOfDay(event, hours, minutes, seconds, ms);
+    setTimeOfDay(event, date);
+
     setDayOfWeek(event, date);
     var dateAsIso = date.toISOString();
 
@@ -176,19 +214,21 @@ module.exports = function RandomEvent(indexPrefix) {
     event['@timestamp'] = dateAsIso;
     event.log_type = samples.log_type();
     event.time = dateAsIso;
-    event.device_ip = samples.ips();
+    // event.device_ip = samples.ips();
     var deviceObject = samples.device();
     event.device_name = deviceObject.name;
+    event.device_ip = deviceObject.ip;
+
     event.site = deviceObject.site;
 
     event.current_user = samples.currentUser();
 
     if (event.log_type === "log") {
+        processes = getProcess(event);
         setEvent(event, date, deviceObject);
     }
     else {
         setAlert(event);
-
     }
     //event.extension = samples.extensions();
     //event.response = samples.responseCodes();
@@ -243,5 +283,5 @@ module.exports = function RandomEvent(indexPrefix) {
     //     os: samples.randomOs(),
     //     ram: samples.randomRam()
     // };
-    return event;
+    return processes.concat(event);
 };

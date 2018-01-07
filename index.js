@@ -31,27 +31,27 @@ client.usable
             argv.log('creating no more than', i, 'events');
 
             for (; i >= 0; i--) {
-                var event = randomEvent(indexPrefix);
+                var events = randomEvent(indexPrefix);
 
                 if (argv.dry) {
-                    console.log('\n\n', event);
+                    //console.log('\n\n', events[i]);
                     continue;
                 }
+                //var events = [event, {index: "zabbix-1"}]
+                for (var j = 0; events.length > j; j++) {
 
-                //for(var j=0;event.length>j;j++) {
+                    // eventBuffer.push might return a promise,
+                    var delay = eventBuffer.push({
+                        header: {_index: events[j].index, _type: 'doc'},
+                        body: events[j]
+                    });
 
-                // eventBuffer.push might return a promise,
-                var delay = eventBuffer.push({
-                    header: {_index: event.index, _type: 'doc'},
-                    body: event
-                });
-
-                if (delay) {
-                    argv.log('waiting for bulk to complete');
-                    // stop the loop and restart once complete
-                    return Promise.resolve(delay).then(crunch);
+                    if (delay) {
+                        argv.log('waiting for bulk to complete');
+                        // stop the loop and restart once complete
+                        return Promise.resolve(delay).then(crunch);
+                    }
                 }
-                // }
             }
         }());
     })
