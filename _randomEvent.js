@@ -41,51 +41,53 @@ function getProcess(iEvent) {
 
 }
 
-function setEvent(iEvent, iDate, iDeviceObject) {
-    "use strict";
-    // var events = [];
-    //_.forEach(iDeviceObject.drivers, function (value, key) {
-    //var event = _.cloneDeep(iEvent);
-    iEvent.total_ram = iDeviceObject.totalRam;
-    iEvent.driver = iDeviceObject.drivers;
-    // console.log("driver", iEvent.driver);
-    iEvent.geo = {
-        coordinates: samples.airports(),
-        src: samples.countries(),
-        dest: samples.countries()
-    };
-    iEvent.geo.srcdest = iEvent.geo.src + ':' + iEvent.geo.dest;
-    iEvent.current_user_last_login_date = iDate.setHours(iDate.getHours() - 4);
-    iEvent.cpu_usage = 0;
-    iEvent.ram_usage = 0;
-    // _.forEach(iEvent.process_list, function (value, key) {
-    //     iEvent.cpu_usage = iEvent.cpu_usage + value.cpu_usage;
-    //     iEvent.ram_usage = iEvent.ram_usage + value.ram_usage;
-    // });
+function setExtansionEvent() {
 
+}
+
+function setEvent(iEvent, iDate, iDeviceObject, iIsLoggin) {
+    "use strict";
+
+    iEvent.total_ram = iDeviceObject.totalRam;
     iEvent.cpu_usage = (Math.random() * (0 - 60) + 60).toFixed(2);
 
     iEvent.ram_usage = (Math.random() * (0 - 8) + 8).toFixed(2);
 
     iEvent.ram_usage = iEvent.ram_usage / iEvent.total_ram;
+    if (iIsLoggin) {
+        iEvent.driver = iDeviceObject.drivers;
+        iEvent.geo = {
+            coordinates: samples.airports(),
+            src: samples.countries(),
+            dest: samples.countries()
+        };
+        iEvent.geo.srcdest = iEvent.geo.src + ':' + iEvent.geo.dest;
+        iEvent.current_user_last_login_date = iDate.setHours(iDate.getHours() - 4);
+        //iEvent.cpu_usage = 0;
+        //iEvent.ram_usage = 0;
+        // _.forEach(iEvent.process_list, function (value, key) {
+        //     iEvent.cpu_usage = iEvent.cpu_usage + value.cpu_usage;
+        //     iEvent.ram_usage = iEvent.ram_usage + value.ram_usage;
+        // });
 
-    iEvent.bw_out_usage = (Math.random() * (0 - 10) + 10).toFixed(2);
-    iEvent.bw_in_usage = (Math.random() * (0 - 50) + 50).toFixed(2);
 
-    iEvent.user_time_load = (Math.random() * (5 - 90) + 90).toFixed(2);
+        iEvent.bw_out_usage = (Math.random() * (0 - 10) + 10).toFixed(2);
+        iEvent.bw_in_usage = (Math.random() * (0 - 50) + 50).toFixed(2);
 
-    //iEvent.driver = samples.driver();
-    iEvent.chrome_ver = samples.chrome_ver();
+        iEvent.user_time_load = (Math.random() * (5 - 90) + 90).toFixed(2);
 
-    //iEvent.process_name = samples.process_name();
-    //iEvent.process_ram_usage = (Math.random() * (2 - 6) + 6).toFixed(2);
-    // iEvent.process_cpu_usage = (Math.random() * (2 - 40) + 40).toFixed(2);
+        //iEvent.driver = samples.driver();
+        iEvent.chrome_ver = samples.chrome_ver();
 
-    iEvent.host = 'theacademyofperformingartsandscience.org';
-    iEvent.request = '/people/type:astronauts/name:' + samples.astronauts() + '/profile';
-    iEvent.url_data = 'https://' + iEvent.host + iEvent.request;
-    iEvent.response_time = (Math.random() * (0 - 60) + 60).toFixed(2);
+        //iEvent.process_name = samples.process_name();
+        //iEvent.process_ram_usage = (Math.random() * (2 - 6) + 6).toFixed(2);
+        // iEvent.process_cpu_usage = (Math.random() * (2 - 40) + 40).toFixed(2);
 
+        iEvent.host = 'science.org';
+        iEvent.request = '/people/type:astronauts/name:' + samples.astronauts() + '/profile';
+        iEvent.url_data = 'https://' + iEvent.host + iEvent.request;
+        iEvent.response_time = (Math.random() * (0 - 60) + 60).toFixed(2);
+    }
 
 }
 
@@ -189,9 +191,7 @@ module.exports = function RandomEvent(indexPrefix) {
     // apply the values found to the date
     var date = new Date(day.year, day.month, day.date, hours, minutes, seconds, ms);
     // setTimeOfDay(event, hours, minutes, seconds, ms);
-    setTimeOfDay(event, date);
 
-    setDayOfWeek(event, date);
     var dateAsIso = date.toISOString();
 
     switch (indexInterval) {
@@ -210,6 +210,9 @@ module.exports = function RandomEvent(indexPrefix) {
             event.index = indexPrefix + Math.floor(i / indexInterval);
             break;
     }
+    setTimeOfDay(event, date);
+    setDayOfWeek(event, date);
+    var isLoggin = samples.loggin() === "login";
 
     event['@timestamp'] = dateAsIso;
     event.log_type = samples.log_type();
@@ -218,16 +221,23 @@ module.exports = function RandomEvent(indexPrefix) {
     var deviceObject = samples.device();
     event.device_name = deviceObject.name;
     event.device_ip = deviceObject.ip;
+    if (isLoggin) {
+        event.site = deviceObject.site;
+        var userObject = samples.currentUser();
+        event.site_bw_in_max=deviceObject.site_bw_in_max;
+        event.site_bw_out_max=deviceObject.site_bw_out_max;
 
-    event.site = deviceObject.site;
+        event.current_user_name = userObject.name;
+        event.current_user_org_belong = userObject.org_belong;
 
-    event.current_user = samples.currentUser();
-
-    if (event.log_type === "log") {
-        processes = getProcess(event);
-        setEvent(event, date, deviceObject);
     }
-    else {
+    if (event.log_type === "log") {
+        if (isLoggin) {
+            processes = getProcess(event);
+        }
+        setEvent(event, date, deviceObject, isLoggin);
+    }
+    else if (isLoggin) {
         setAlert(event);
     }
     //event.extension = samples.extensions();
@@ -283,5 +293,6 @@ module.exports = function RandomEvent(indexPrefix) {
     //     os: samples.randomOs(),
     //     ram: samples.randomRam()
     // };
+
     return processes.concat(event);
 };

@@ -31,8 +31,9 @@ sets.astronauts = new RandomList(require('./astronauts').map(function (name) {
 
 sets.ips = new IpGenerator(100, 1000);
 sets.log_type = new WeightedList(require('./log_type'));
+sets.loggin = new WeightedList(require('./loggin'));
 
-sets.currentUser = new WeightedList(require('./current_users'));
+sets.currentUser = new RandomList(require('./current_users'));
 sets.alert = new WeightedList(require('./alerts'));
 
 sets.device = new RandomList(require('./devices'));
