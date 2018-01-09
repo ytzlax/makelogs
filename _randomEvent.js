@@ -53,7 +53,7 @@ function setEvent(iEvent, iDate, iDeviceObject, iIsLoggin) {
 
     iEvent.ram_usage = (Math.random() * (0 - 8) + 8).toFixed(2);
 
-    iEvent.ram_usage = iEvent.ram_usage / iEvent.total_ram;
+    iEvent.ram_usage = (iEvent.ram_usage / iEvent.total_ram) * 100;
     if (iIsLoggin) {
         iEvent.driver = iDeviceObject.drivers;
         iEvent.geo = {
@@ -98,6 +98,8 @@ function randomDate(start, end) {
 function setAlert(iEvent) {
     "use strict";
     iEvent.alert = samples.alert();
+    iEvent.alert_number = 1;
+
 }
 
 /**
@@ -224,8 +226,8 @@ module.exports = function RandomEvent(indexPrefix) {
     if (isLoggin) {
         event.site = deviceObject.site;
         var userObject = samples.currentUser();
-        event.site_bw_in_max=deviceObject.site_bw_in_max;
-        event.site_bw_out_max=deviceObject.site_bw_out_max;
+        event.site_bw_in_max = deviceObject.site_bw_in_max;
+        event.site_bw_out_max = deviceObject.site_bw_out_max;
 
         event.current_user_name = userObject.name;
         event.current_user_org_belong = userObject.org_belong;
