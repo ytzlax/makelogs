@@ -78,6 +78,7 @@ function setEvent(iEvent, iDate, iDeviceObject, iIsLoggin) {
 
         //iEvent.driver = samples.driver();
         iEvent.chrome_ver = iDeviceObject.chrome_ver;
+        iEvent.screen_res = iDeviceObject.screen_res;
 
         //iEvent.process_name = samples.process_name();
         //iEvent.process_ram_usage = (Math.random() * (2 - 6) + 6).toFixed(2);
