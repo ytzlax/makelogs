@@ -21,7 +21,6 @@ sets.lessRandomRespSize = require('./response_size');
 sets.randomRam = new RandomList(require('./ram'));
 sets.randomOs = new RandomList(require('./os'));
 //sets.driver = new RandomList(require('./drivers'));
-sets.chrome_ver = new RandomList(require('./chrome_vers'));
 
 sets.astronauts = new RandomList(require('./astronauts').map(function (name) {
     return name.replace(/\W+/g, '-').toLowerCase();
