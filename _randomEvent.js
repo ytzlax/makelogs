@@ -162,8 +162,9 @@ function randomDate(start, end) {
     var userObject = samples.currentUser();
     event.current_user_name = userObject.name;
     event.current_user_org_belong = userObject.org_belong;
-
-    event.actions = samples.actions().name;
+    var actions=samples.actions()
+    event.actions =actions.name;
+    event.actions_file =actions.file_name;
 
 
 
