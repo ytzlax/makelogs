@@ -36,6 +36,8 @@ sets.currentUser = new RandomList(require('./current_users'));
 sets.alert = new WeightedList(require('./alerts'));
 
 sets.device = new RandomList(require('./devices'));
+sets.actions = new RandomList(require('./actions'));
+
 sets.process_list = new RandomSample(2, 10, require('./process'));
 
 

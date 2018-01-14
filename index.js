@@ -31,19 +31,17 @@ client.usable
             argv.log('creating no more than', i, 'events');
 
             for (; i >= 0; i--) {
-                var events = randomEvent(indexPrefix);
+                var event = randomEvent(indexPrefix);
 
                 if (argv.dry) {
                     //console.log('\n\n', events[i]);
                     continue;
                 }
-                //var events = [event, {index: "zabbix-1"}]
-                for (var j = 0; events.length > j; j++) {
 
                     // eventBuffer.push might return a promise,
                     var delay = eventBuffer.push({
-                        header: {_index: events[j].index, _type: 'doc'},
-                        body: events[j]
+                        header: {_index: event.index, _type: 'doc'},
+                        body: event
                     });
 
                     if (delay) {
@@ -51,7 +49,7 @@ client.usable
                         // stop the loop and restart once complete
                         return Promise.resolve(delay).then(crunch);
                     }
-                }
+                
             }
         }());
     })
