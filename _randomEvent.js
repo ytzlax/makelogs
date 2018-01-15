@@ -115,24 +115,7 @@ function setAlert(iEvent) {
 function setTimeOfDay(iEvent, iDate) {
 
     "use strict";
-    // var newTime = new Date('2017', '04', '25', iHour, iMinutes, iSeconds, iMs);
-    // var sixDate = new Date("2017-05-25T06:00:00.000Z");
-    // var elavenDate = new Date("2017-05-25T11:00:00.000Z");
-    // var fourDate = new Date("2017-05-25T16:00:00.000Z");
-    // var nineDate = new Date("2017-05-25T21:00:00.000Z");
-    //
-    // if (newTime > sixDate && newTime <= elavenDate) {
-    //     iEvent.time_of_day = "morning";
-    // }
-    // else if (newTime > elavenDate && newTime <= fourDate) {
-    //     iEvent.time_of_day = "noon";
-    // }
-    // else if (newTime > fourDate && newTime <= nineDate) {
-    //     iEvent.time_of_day = "evening";
-    // }
-    // else {
-    //     iEvent.time_of_day = "night";
-    // }
+
     var hour = iDate.getHours();
     if (hour > 6 && hour <= 11) {
         iEvent.time_of_day = "morning";
