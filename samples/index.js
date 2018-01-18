@@ -27,7 +27,6 @@ sets.astronauts = new RandomList(require('./astronauts').map(function (name) {
 }));
 
 
-
 sets.ips = new IpGenerator(100, 1000);
 sets.log_type = new WeightedList(require('./log_type'));
 sets.loggin = new WeightedList(require('./loggin'));
@@ -36,6 +35,8 @@ sets.currentUser = new RandomList(require('./current_users'));
 sets.alert = new WeightedList(require('./alerts'));
 
 sets.device = new RandomList(require('./devices'));
+sets.url = new RandomList(require('./urls'));
+
 sets.process_list = new RandomSample(2, 10, require('./process'));
 
 
@@ -43,8 +44,8 @@ sets.timezones = new WeightedList({
     '+02:00': 1
 });
 
- sets.airports = new RandomList(require('./airports'));
- sets.countries = new WeightedList(require('./countries'));
+sets.airports = new RandomList(require('./airports'));
+sets.countries = new WeightedList(require('./countries'));
 // sets.extensions = new WeightedList({
 //   'png': 3,
 //   'gif': 2,

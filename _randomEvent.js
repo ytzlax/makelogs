@@ -86,7 +86,7 @@ function setEvent(iEvent, iDate, iDeviceObject, iIsLoggin) {
 
         iEvent.host = 'science.org';
         iEvent.request = '/people/type:astronauts/name:' + samples.astronauts() + '/profile';
-        iEvent.url_data = 'https://' + iEvent.host + iEvent.request;
+        iEvent.url_data = samples.url()
         iEvent.response_time = (Math.random() * (0 - 60) + 60).toFixed(2);
     }
 
