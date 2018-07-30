@@ -13,7 +13,7 @@ eventBuffer.push = function (event) {
     Array.prototype.push.call(eventBuffer, event);
   }
 
-  if (eventBuffer.length === 3000 || eventBuffer.final) {
+  if (eventBuffer.length === 1000 || eventBuffer.final) {
     return eventBuffer.flush();
   }
 };
