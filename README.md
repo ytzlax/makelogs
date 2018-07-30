@@ -8,6 +8,7 @@ Events are pushed into `logstash-YYYY.MM.DD` formatted indices (configurable usi
 
 Documents look like this:
 
+node index --url URL:9200 -c 1000000 -s 2 -i 5000000
 ```json
 {
   "_index": "logstash-2014.06.17",
