@@ -1,5 +1,6 @@
 var samples = require('./samples');
 var argv = require('./argv');
+var config = require('./config.json');
 
 var eventCounter = -1;
 var count = argv.total;
@@ -143,8 +144,14 @@ module.exports = function RandomEvent(indexPrefix) {
         ram: samples.randomRam()
     };
 
-    event.relation = getRelation();
-    addBlahFields(event);
+
+    if (indexPrefix.indexOf('-p') > -1) {
+        event.nId = Math.floor((Math.random() * config.n_number) + 0);
+    }
+    else {
+        event.relation = getRelation();
+    }
+    //addBlahFields(event);
     return event;
 };
 
@@ -159,88 +166,20 @@ function addBlahFields(event) {
     event.h = event.machine.ram;
     event.i = event.machine.ram;
     event.g = event.machine.ram;
-    event.k = event.machine.ram;
-    event.l = event.machine.ram;
-    event.m = event.machine.ram;
-    event.n = event.machine.ram;
-    event.o = event.machine.os;
-    event.p = event.machine.ram;
-    event.q = event.xss;
-    event.r = event.xss;
-    event.s = event.xss;
-    event.t = event.xss;
-    event.u = event.xss;
-    event.v = event.machine.ram;
-    event.w = event.machine.ram;
-    event.x = event.machine.ram;
-    event.y = event.machine.ram;
-    event.z = event.machine.ram;
-    event.aa = event.machine.os;
-    event.ba = event.machine.ram;
-    event.ca = event.xss;
-    event.da = event.xss;
-    event.ea = event.xss;
-    event.fa = event.xss;
-    event.ga = event.xss;
-    event.ha = event.machine.ram;
-    event.ia = event.machine.ram;
-    event.ga = event.machine.ram;
-    event.ka = event.machine.ram;
-    event.la = event.machine.ram;
-    event.ma = event.machine.ram;
-    event.na = event.machine.ram;
-    event.oa = event.machine.os;
-    event.pa = event.machine.ram;
-    event.qa = event.xss;
-    event.ra = event.xss;
-    event.sa = event.xss;
-    event.ta = event.xss;
-    event.ua = event.xss;
-    event.va = event.machine.ram;
-    event.wa = event.machine.ram;
-    event.xa = event.machine.ram;
-    event.ya = event.machine.ram;
-    event.za = event.machine.ram;
-    event.ab = event.machine.os;
-    event.bb = event.machine.ram;
-    event.cb = event.xss;
-    event.db = event.xss;
-    event.eb = event.xss;
-    event.fb = event.xss;
-    event.gb = event.xss;
-    event.hb = event.machine.ram;
-    event.ib = event.machine.ram;
-    event.gb = event.machine.ram;
-    event.kb = event.machine.ram;
-    event.lb = event.machine.ram;
-    event.mb = event.machine.ram;
-    event.nb = event.machine.ram;
-    event.ob = event.machine.os;
-    event.pb = event.machine.ram;
-    event.qb = event.xss;
-    event.rb = event.xss;
-    event.sb = event.xss;
-    event.tb = event.xss;
-    event.ub = event.xss;
-    event.nc = event.machine.ram;
     event.oc = event.machine.os;
     event.pc = event.machine.ram;
     event.qc = event.xss;
     event.rc = event.xss;
     event.sc = event.xss;
-    event.tc = event.xss;
-    event.uc = event.xss;
-
-
 }
 
 function getRandomId() {
-    return Math.floor((Math.random() * argv.count) + 1);
+    return Math.floor((Math.random() * config.p_number) + config.n_number);
 }
 
 function getRelation() {
     const idsArr = [];
-    for (let i = 0; 4 > i; i++) {
+    for (let i = 0; (config.p_number / config.n_number) > i; i++) {
         const randomId = getRandomId();
         if (idsArr.indexOf(randomId) < 0) {
             idsArr.push(randomId);

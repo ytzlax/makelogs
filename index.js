@@ -2,6 +2,8 @@
  * Notify user of updates
  */
 var pkg = require('./package.json');
+var config = require('./config.json');
+
 require('update-notifier')({packageName: pkg.name, packageVersion: pkg.version}).notify();
 
 var Promise = require('bluebird');
@@ -32,13 +34,14 @@ client.usable
             argv.log('creating no more than', i, 'events');
 
             for (; i >= 0; i--) {
-                var event = randomEvent(indexPrefix);
+                const index = i > config.n_number ? indexPrefix + "-p" : indexPrefix + "-n";
+                var event = randomEvent(index);
 
                 if (argv.dry) {
                     console.log('\n\n', event);
                     continue;
                 }
-                event.entityId = i+'a';
+                event.entityId = i;
                 // eventBuffer.push might return a promise,
                 var delay = eventBuffer.push({
                     header: {_index: event.index, _type: 'doc', _id: event.entityId},
